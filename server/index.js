@@ -80,11 +80,15 @@ app.post('/api/todos', (req, res) => {
 // PUT: Update
 app.put('/api/todos/:id', (req, res) => {
     try {
-        const task = findTask(req.params.id)
+        const data = getTodos()
+        const task = data.find(
+            el => el.id === req.params.id
+        );
         if (!task) return res.status(404).send('Error: Not found')
         if (req.body.title.trim() == "") throw new Error("Need enter text label")
         task.title = req.body.title ?? task.title;
         task.status = req.body.status ?? task.status    
+        
         saveTodos(data)
         res.status(200).json(task)
     }
@@ -96,24 +100,16 @@ app.put('/api/todos/:id', (req, res) => {
 })
 app.delete('/api/todos/:id', (req, res) => {
     try {
-        const task = findTask(req.params.id)
-        if (!task) return res.status(404).send('Error: Not found')
-        const index = data.indexOf(task)
-        data.splice(index, 1)
-        saveTodos(data)
-        res.status(200).json(task)
+        let data = getTodos()
+        const newData = data.filter(el => el.id !== req.params.id)
+        saveTodos(newData)
+        res.status(200).json(newData)
     }
     catch (e) {
         res.status(500).json({
             error: e.message
         })
     }
-})
-
-app.use((req, res) => {
-    res.status(404).json({
-            error: 'Данный роут не найден'
-    })
 })
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

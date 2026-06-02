@@ -1,38 +1,22 @@
 [
   {
-    "id": "1",
-    "title": "Задачка номер одиn",
+    "id": "eb3f4799-4890-4530-8fef-b0ba54d80978",
+    "title": "ihorППП",
+    "status": false
+  },
+  {
+    "id": "0f0ace4a-a9fc-47d6-9fe8-77325c2380d3",
+    "title": "ПРИВЕЕЕЕТ",
     "status": true
   },
   {
-    "id": "2",
-    "title": "Задачка два",
-    "status": true,
-    "completed": false
+    "id": "ba0a2edf-7c15-4c48-87a0-b30c4988aabb",
+    "title": "GHBD123",
+    "status": true
   },
   {
-    "id": "eb3f4799-4890-4530-8fef-b0ba54d80978",
-    "title": "ihor",
-    "status": false
-  },
-  {
-    "id": "b6198dc1-dc35-4049-8d95-14651a33587b",
-    "title": "ihor",
-    "status": false
-  },
-  {
-    "id": "f9c1621d-179e-4433-a71e-a241bfce6045",
-    "title": "ihor",
-    "status": false
-  },
-  {
-    "id": "107b0bb8-9869-4ffa-a3aa-080da796edbf",
-    "title": "ihor",
-    "status": false
-  },
-  {
-    "id": "47a280df-abb2-46f6-a99f-176cabfac595",
-    "title": "ihor",
-    "status": false
+    "id": "ea68e6f7-094c-4d59-90d4-0f0db4d62fde",
+    "title": "Купить хлебушек123",
+    "status": true
   }
 ]
