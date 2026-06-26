@@ -1,118 +1,97 @@
-import { useState, useEffect } from 'react'
-import ShowModalEdit from './showModalEdit/showModalEdit'
-import './App.css'
+import { useState, useEffect } from "react";
+import ShowModal from "./ShowModal/ShowModal";
+import TodoCard from "./TodoCard/TodoCard";
+import "./App.css";
 
 function App() {
-  const [todos, setTodos] = useState([])
-  const [titleText, setTitleText] = useState('')
-  const [titleTextEdit, setTitleTextEdit] = useState('')
-  const [statusEdit, setStatusEdit] = useState(false)
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [todos, setTodos] = useState([]);
+  const [modalMode, setModalMode] = useState(null);
+
   const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
-    getData()
+    getData();
   }, []);
+
+  const getData = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/todos");
+
+      if (!response.ok) {
+        throw new Error("Ошибка загрузки данных");
+      }
+
+      const data = await response.json();
+      setTodos(data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const openCreateModal = () => {
+    setModalMode("create");
+  };
 
   const openEditModal = (todo) => {
     setSelectedTask(todo);
-    setIsEditModalOpen(true);
+    setModalMode("edit");
   };
 
-  const handleChange = (event) => {
-    setTitleText(event.target.value)
-  }
-
-  const handleChangeEdit = (event) => {
-    setTitleTextEdit(event.target.value)
-  }
-  
-  const getData = async () => {
-    fetch("http://localhost:5000/api/todos")
-      .then(res => res.json())
-      .then(data => setTodos(data));
-  }
-
-  const handlePostRequest = async () => {
-    if (titleText.trim() == "") {
-      throw new Error('Поле с названием не должно быть пустым!')
-    }
-    const payload = { title: titleText }
-    try {
-      const response = await fetch('http://localhost:5000/api/todos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
-      
-      if (!response.ok) {
-        throw new Error('Ошибка сети: ' + response.status);
-      }
-      setTitleText('')
-      getData()
-    }
-    catch (e) {
-      console.error(e);
-    }
-  }
   const handleDeleteRequest = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/todos/${id}`,
-        {
-          method: 'DELETE',
-        })
+      const response = await fetch(`http://localhost:5000/api/todos/${id}`, {
+        method: "DELETE",
+      });
       if (!response.ok) {
-        throw new Error('Ошибка сети: ' + response.status);
+        throw new Error("Ошибка сети: " + response.status);
       }
-      getData()
+      setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    } catch (e) {
+      console.error("Ошибка при отправке:", e);
     }
-    catch (e) {
-      console.error('Ошибка при отправке:', error);
-    }
-  }
+  };
 
   return (
     <>
-      <section id="center">
-        <div className='todos'>
-          {todos.map(todo => 
-            <div className='todo-task' key={todo.id}>
-              <h4 className='todo-task__title'>{todo.title}</h4>
-              <h6 className='todo-task__id'>{todo.id}</h6>
-              <h6 className='todo-task__status'>{todo.status ? "true" : "false" }</h6>
-              <button onClick={() => openEditModal(todo)}>Изменить</button>
-              <button onClick={() => handleDeleteRequest(todo.id)}>Удалить</button>
-            </div>
-          )}
+      <section className="todos">
+        <div className="todos__container container">
+          {todos.map((todo) => (
+            <TodoCard
+              key={todo.id}
+              todo={todo}
+              onUpdate={openEditModal}
+              onDelete={handleDeleteRequest}
+            />
+          ))}
         </div>
       </section>
-      <button command="show-modal" commandfor="todo-task__modal-post">Добавить новую задачу</button>
 
-<dialog id="todo-task__modal-post">
-  <p>Создание новой таски:</p>
-  <form>
-    <label htmlFor="title">Название задачи:</label>
-    <input type="text" name="title" value={titleText} onChange={handleChange} placeholder="купить хлеб" />
-  </form>
-  <button commandfor="todo-task__modal-post" command="close" onClick={handlePostRequest}>Добавить</button>
-</dialog>
-
-  {
-    isEditModalOpen && selectedTask && (
-      <ShowModalEdit
-        task={selectedTask}
-        onClose={() => {
-          setIsEditModalOpen(false); 
-          getData();
-        }}
-      />
-    )
-  }
-
-  </>
-  )
+      <button onClick={() => openCreateModal()}>Добавить новую задачу</button>
+      {modalMode == "create" && (
+        <ShowModal
+          action={modalMode}
+          onClose={(createdTodo) => {
+            setModalMode(null);
+            createdTodo ? setTodos((prev) => [...prev, createdTodo]) : "";
+          }}
+        />
+      )}
+      {modalMode == "edit" && selectedTask && (
+        <ShowModal
+          action={modalMode}
+          task={selectedTask}
+          onClose={(updatedTodo) => {
+            setModalMode(null);
+            setTodos((prev) =>
+              prev.map((todo) =>
+                todo.id === updatedTodo.id ? updatedTodo : todo,
+              ),
+            );
+          }}
+        />
+      )}
+    </>
+  );
 }
 
-export default App
+export default App;
