@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./ShowModal.css";
 
-function ShowModal({ action, task, onClose, onSuccess, onError }) {
+export default function ShowModal({ action, task, onClose, onSubmit }) {
   const [todo, setTodo] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState(false);
@@ -15,79 +15,26 @@ function ShowModal({ action, task, onClose, onSuccess, onError }) {
     }
   }, [task]);
 
-  const handleUpdate = async (e) => {
+  function handleSubmit(e) {
     e.preventDefault();
 
-    try {
-      setLoading(true);
-      const response = await fetch(
-        `http://localhost:5000/api/todos/${task.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title: todo,
-            status,
-          }),
-        },
-      );
-      if (!response.ok) {
-        throw new Error(`Ошибка сервера: ${response.status}`);
-      }
+    onSubmit({
+      id: task?.id,
+      title: todo,
+      description,
+      status,
+      action,
+    });
 
-      const updatedTask = await response.json();
-
-      onSuccess?.(`Задача "${updatedTask.title}" успешно обновлена`);
-    } catch (e) {
-      onError?.(e.message);
-    } finally {
-      onClose({
-        id: task.id,
-        title: todo,
-        status,
-      });
-      setLoading(false);
-    }
-  };
-  const handlePostRequest = async (e) => {
-    e.preventDefault();
-    let data = null;
-    try {
-      if (todo.trim() == "") {
-        throw new Error("Поле с названием не должно быть пустым!");
-      }
-      const response = await fetch("http://localhost:5000/api/todos", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: todo,
-          status,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Ошибка сети: " + response.status);
-      }
-      data = await response.json();
-      console.log(data)
-    } catch (e) {
-      onError?.(e.message);
-    } finally {
-      onClose(data);
-      setLoading(false);
-    }
-  };
+    onClose();
+  }
 
   return (
     <div className="modal-overlay">
       <div className="modal-wrapper">
         <form
           className="modal-content"
-          onSubmit={action === "edit" ? handleUpdate : handlePostRequest}
+          onSubmit={handleSubmit}
         >
           {action == "edit" ? (
             <h2 className="modal-content__title">💡 Редактирование записи</h2>
@@ -141,5 +88,3 @@ function ShowModal({ action, task, onClose, onSuccess, onError }) {
     </div>
   );
 }
-
-export default ShowModal;

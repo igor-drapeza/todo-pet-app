@@ -1,93 +1,60 @@
-import { useState, useEffect } from "react";
-import ShowModal from "./ShowModal/ShowModal";
-import TodoCard from "./TodoCard/TodoCard";
+import { useState } from "react";
+import ShowModal from "./components/ShowModal/ShowModal";
+import TodoList from "./components/TodoList/TodoList";
+import { useTodos } from "./hooks/useTodos";
 import "./App.css";
 
 function App() {
-  const [todos, setTodos] = useState([]);
-  const [modalMode, setModalMode] = useState(null);
+  const { todos, add, update, remove } = useTodos();
 
-  const [selectedTask, setSelectedTask] = useState(null);
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const getData = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/todos");
-
-      if (!response.ok) {
-        throw new Error("Ошибка загрузки данных");
-      }
-
-      const data = await response.json();
-      setTodos(data);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
+  const [modal, setModal] = useState({
+    mode: null,
+    task: null,
+  });
+  
   const openCreateModal = () => {
-    setModalMode("create");
+    setModal({mode: "create", task: null});
   };
 
-  const openEditModal = (todo) => {
-    setSelectedTask(todo);
-    setModalMode("edit");
+  const openEditModal = (task) => {
+    setModal({mode: "edit", task});
   };
 
-  const handleDeleteRequest = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/todos/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw new Error("Ошибка сети: " + response.status);
-      }
-      setTodos((prev) => prev.filter((todo) => todo.id !== id));
-    } catch (e) {
-      console.error("Ошибка при отправке:", e);
+  async function handleSubmit(data) {
+    if (modal.mode === "create") {
+      await add(data);
     }
-  };
+
+    if (modal.mode === "edit") {
+      await update(modal.task.id, data);
+    }
+
+    setModal({
+      mode: null,
+      task: null,
+    });
+  }
 
   return (
     <>
-      <section className="todos">
-        <div className="todos__container container">
-          {todos.map((todo) => (
-            <TodoCard
-              key={todo.id}
-              todo={todo}
-              onUpdate={openEditModal}
-              onDelete={handleDeleteRequest}
-            />
-          ))}
-        </div>
-      </section>
+      <TodoList
+        todos={todos}
+        onEdit={openEditModal}
+        onDelete={remove}
+      />
+      <button onClick={openCreateModal}>Добавить новую задачу</button>
 
-      <button onClick={() => openCreateModal()}>Добавить новую задачу</button>
-      {modalMode == "create" && (
+      {modal.mode && (
         <ShowModal
-          action={modalMode}
-          onClose={(createdTodo) => {
-            setModalMode(null);
-            createdTodo ? setTodos((prev) => [...prev, createdTodo]) : "";
-          }}
-        />
-      )}
-      {modalMode == "edit" && selectedTask && (
-        <ShowModal
-          action={modalMode}
-          task={selectedTask}
-          onClose={(updatedTodo) => {
-            setModalMode(null);
-            setTodos((prev) =>
-              prev.map((todo) =>
-                todo.id === updatedTodo.id ? updatedTodo : todo,
-              ),
-            );
-          }}
+          action={modal.mode}
+          task={modal.task}
+          onSubmit={handleSubmit}
+          onClose={() =>
+            setModal({
+              mode: null,
+              task: null,
+            })
+          }
         />
       )}
     </>
