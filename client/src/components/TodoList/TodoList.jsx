@@ -1,4 +1,5 @@
 import TodoCard from "./../TodoCard/TodoCard";
+import "./TodoList.css";
 
 export default function TodoList({
   todos,
@@ -9,7 +10,7 @@ export default function TodoList({
     <>
       <div className="todos__container container">
         {todos.length == 0 ? 'Давай добавим задачи прямо сейчас!' :
-        todos.map((todo) => (
+        todos.filter(todo => todo).map((todo) => (
           <TodoCard
             key={todo.id}
             todo={todo}

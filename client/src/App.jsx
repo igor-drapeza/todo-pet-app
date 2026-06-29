@@ -11,13 +11,13 @@ function App() {
     mode: null,
     task: null,
   });
-  
+
   const openCreateModal = () => {
-    setModal({mode: "create", task: null});
+    setModal({ mode: "create", task: null });
   };
 
   const openEditModal = (task) => {
-    setModal({mode: "edit", task});
+    setModal({ mode: "edit", task });
   };
 
   async function handleSubmit(data) {
@@ -37,12 +37,19 @@ function App() {
 
   return (
     <>
+      <header className="header">
+        <div className="header__container container">
+          <button className="header__btn create-btn btn"
+            onClick={openCreateModal}>
+            Добавить задачу
+          </button>
+        </div>
+      </header>
       <TodoList
         todos={todos}
         onEdit={openEditModal}
         onDelete={remove}
       />
-      <button onClick={openCreateModal}>Добавить новую задачу</button>
 
       {modal.mode && (
         <ShowModal

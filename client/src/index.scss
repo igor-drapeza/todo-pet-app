@@ -1,0 +1,9 @@
+@use './../src/variables/_variables' as *;
+
+@media (prefers-color-scheme: dark) { 
+  :root {
+    font-family: 'Montserrat', sans-serif;
+    background-color: $COLOR-DARK-THEME-BG;
+    color: $COLOR-WHITE-TEXT
+  }
+}

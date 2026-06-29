@@ -1,13 +1,16 @@
+import "./TodoCard.css";
 
 export default function TodoCard({ todo, onEdit, onDelete }) {
   return (
     <>
-      <div className="todo" key={todo.id}>
-        <h4 className="todo__title">{todo.title}</h4>
-        <h6 className="todo__id">{todo.id}</h6>
-        <h6 className="todo__status">{todo.status ? "true" : "false"}</h6>
-        <button onClick={() => onEdit(todo)}>Изменить</button>
-        <button onClick={() => onDelete(todo.id)}>Удалить</button>
+      <div className="todo" onClick={() => onEdit(todo)}>
+        <h4 className="todo__title">{todo.status ? "✅" : "❌"}{todo.title}</h4>
+        <p className="todo__title-description">Описание: </p>
+        <p className="todo__description">{todo.description}</p>
+        <div className="todo__action">
+          <button className="todo__btn edit-btn btn" onClick={() => onEdit(todo)}>Изменить</button>
+        <button className="todo__btn delete-btn btn" onClick={() => onDelete(todo.id)}>Удалить</button>
+        </div>
       </div>
     </>
   );

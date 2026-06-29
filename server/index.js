@@ -60,6 +60,7 @@ app.post("/api/todos", (req, res) => {
     const newTask = {
       id: uuid,
       title: req.body.title,
+      description: req.body.description,
       status: req.body.status ?? false,
     };
     data.push(newTask);
@@ -79,6 +80,7 @@ app.put("/api/todos/:id", (req, res) => {
     if (!task) return res.status(404).send("Error: Not found");
     if (req.body.title.trim() == "") throw new Error("Need enter text label");
     task.title = req.body.title ?? task.title;
+    task.description = req.body.description ?? task.description,
     task.status = req.body.status ?? task.status;
 
     saveTodos(data);

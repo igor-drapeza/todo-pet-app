@@ -1,0 +1,33 @@
+@use './../src/variables/_variables' as *;
+
+.container {
+    width: 1140px;
+    margin: 0 auto;
+}
+
+.header {
+    padding: 30px;
+    border: 1px solid $COLOR-WHITE-TEXT;
+    border-width: 0px 0px 1px 0px ;
+    &__title {
+        font-size: 24px;
+    }
+
+    &__btn {
+        cursor: pointer;
+        padding: 15px 10px;
+        border-radius: 0px;
+        border: none;
+        color: $COLOR-DARK-THEME-BG;
+        font-weight: 400;
+        font-size: 16px;
+        background-color: $COLOR-YELLOW-1-BG;
+
+        transition: .4s all;
+
+        &:hover {
+        background-color: $COLOR-YELLOW-2-BG;
+        border-radius: 23px;
+        }
+    }
+}
