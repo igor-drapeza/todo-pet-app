@@ -25,4 +25,8 @@
 .header__btn:hover {
   background-color: #ffc962;
   border-radius: 23px;
+}
+
+.label__filter {
+  margin-left: 20px;
 }/*# sourceMappingURL=App.css.map */

@@ -8,8 +8,8 @@
   {
     "id": "c3b49fff-607c-425f-a1b3-80a8fb2ee2f8",
     "title": "Создать пет-проект",
-    "description": "ТУДУ-лист",
-    "status": true
+    "description": "ТУДУ-лист!asd",
+    "status": false
   },
   {
     "id": "c5643374-785e-4337-95af-79e93714cbaa",
@@ -24,33 +24,27 @@
     "status": false
   },
   {
-    "id": "a2f99f6c-4a66-4e85-9b1b-ad7d14cf323c",
-    "title": "Запустить компьютер супер-жесткое задание на три строчки",
-    "description": "В 11:00 в пн.",
-    "status": true
-  },
-  {
-    "id": "045ec45e-b325-4428-b891-71e69e6c46bf",
-    "title": "Купить сушки!",
-    "description": "Шла Саша по шоссе и сосала сушку! Ехал Грека через реку, видит Грека в реке рак ",
-    "status": false
-  },
-  {
     "id": "64c98550-5c6d-4d8b-9b2b-6f7a9c151e36",
     "title": "Сходить в зал",
     "description": "9:00 26.06.2026",
     "status": true
   },
   {
-    "id": "03ca992a-ef10-4339-a203-645185e17373",
+    "id": "4eebe46f-ff23-4def-a678-9e77713ed39e",
+    "title": "Еще задание! О_о!!!!!!!!!!!!!!!1",
+    "description": "Еще задание! О_о",
+    "status": true
+  },
+  {
+    "id": "6aff2495-3a9d-40ac-8de1-41a170d4d1b9",
     "title": "Еще задание! О_о",
     "description": "",
     "status": false
   },
   {
-    "id": "4eebe46f-ff23-4def-a678-9e77713ed39e",
-    "title": "Еще задание! О_о!!!!!!!!!!!!!!!1",
-    "description": "Еще задание! О_о",
+    "id": "97a6cb21-d7ad-44bd-ab22-34149e0fb8f3",
+    "title": "Еще задание! О_о",
+    "description": "324r32r",
     "status": true
   }
 ]
