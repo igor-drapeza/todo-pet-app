@@ -1,0 +1,10 @@
+.todos {
+    &__container {
+        display: flex;
+        justify-content: left;
+        margin-top: 20px !important;
+
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+}
