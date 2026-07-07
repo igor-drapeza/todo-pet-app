@@ -7,7 +7,10 @@ export default function ShowModal({ action, task, onClose, onSubmit }) {
   const [status, setStatus] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [error, setError] = useState("");
+
   useEffect(() => {
+    setError("");
     if (task) {
       setTodo(task.title || "");
       setDescription(task.description || "");
@@ -15,18 +18,26 @@ export default function ShowModal({ action, task, onClose, onSubmit }) {
     }
   }, [task]);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
+    setError("");
 
-    onSubmit({
-      id: task?.id,
-      title: todo,
-      description,
-      status,
-      action,
-    });
+    try {
+      await onSubmit({
+        id: task?.id,
+        title: todo,
+        description,
+        status,
+        action,
+      });
 
-    onClose();
+      onClose();
+    } catch (err) {
+      setError(err?.message || "Произошла ошибка");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -73,6 +84,12 @@ export default function ShowModal({ action, task, onClose, onSubmit }) {
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
+
+          {error ? (
+            <div style={{ color: "crimson", marginTop: 10, marginBottom: 10 }}>
+              {error}
+            </div>
+          ) : null}
 
           <div className="modal__content-buttons">
             <button className="modal__content-btn sucsess-btn" type="submit" disabled={loading}>
